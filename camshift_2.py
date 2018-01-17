@@ -29,17 +29,15 @@ term_crit = ( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1 )
 while(True):
     ret,frame = cap.read()
     if trackObject != 0:
-        hsv_roi =  cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        mask = cv2.inRange(hsv_roi, np.array((0., 30.,10.)), np.array((180.,256.,255.)))
+        hsv =  cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        mask = cv2.inRange(hsv, np.array((0., 30.,10.)), np.array((180.,256.,255.)))
         if trackObject == -1:
-            track_window=(ys,xs,hs,ws)
-            roi = frame[ys:ys+hs, xs:xs+ws]
+            track_window=(xs,ys,ws,hs)
             maskroi = mask[ys:ys+hs, xs:xs+ws]
-            hsv_roi1 = hsv_roi[ys:ys+hs, xs:xs+ws]
-            roi_hist = cv2.calcHist([hsv_roi1],[0],maskroi,[180],[0,180])
+            hsv_roi = hsv[ys:ys+hs, xs:xs+ws]
+            roi_hist = cv2.calcHist([hsv_roi],[0],maskroi,[180],[0,180])
             cv2.normalize(roi_hist,roi_hist,0,255,cv2.NORM_MINMAX)
             trackObject = 1
-        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
         dst = cv2.calcBackProject([hsv], [0], roi_hist, [0, 180], 1)
         dst &= mask
         ret, track_window = cv2.CamShift(dst, track_window, term_crit)
@@ -51,6 +49,6 @@ while(True):
         cv2.imshow('imshow1',frame[ys:ys+hs,xs:xs+ws])
         cv2.bitwise_not(frame[ys:ys+hs,xs:xs+ws],frame[ys:ys+hs,xs:xs+ws])
     cv2.imshow('imshow',frame)
-    if  cv2.waitKey(100)==27:
+    if  cv2.waitKey(10)==27:
         break
 cv2.destroyAllWindows()
