@@ -46,8 +46,6 @@ while(True):
         pts = cv2.boxPoints(ret)
         pts = np.int0(pts)
         img2 = cv2.polylines(frame,[pts],True, 255,2)
-        cv2.imshow('dst',dst)
-        cv2.imshow('mask',mask)
         
 
 
