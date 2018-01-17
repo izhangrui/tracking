@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from trackers import camshift
 
 
 xs,ys,ws,hs = 0,0,0,0  #selection
@@ -27,6 +28,14 @@ cv2.namedWindow('imshow')
 cv2.setMouseCallback('imshow',onMouse)
 while(True):
     ret,frame = cap.read()
+    if trackObject != 0:
+        trackwindow=(xs,ys,ws,hs)
+        ret,trackwindow = camshift(frame,trackwindow,trackObject)
+        trackObject = 1
+        pts = cv2.boxPoints(ret)
+        pts = np.int0(pts)
+        cv2.polylines(frame,[pts],True, 255,2)
+
     if selectObject == True and ws>0 and hs>0:
         cv2.imshow('imshow1',frame[ys:ys+hs,xs:xs+ws])
         cv2.bitwise_not(frame[ys:ys+hs,xs:xs+ws],frame[ys:ys+hs,xs:xs+ws])
