@@ -2,11 +2,11 @@ import cv2
 import numpy as np
 
 
-xs,ys,ws,hs = 0,0,0,0  #selection
-xo,yo=0,0 #origin
+xs,ys,ws,hs = 0,0,0,0  #selection.x selection.y
+xo,yo=0,0 #origin.x origin.y
 selectObject = False
 trackObject = 0
-def onMouse(event, x, y, flags, prams):
+def onMouse(event, x, y, flags, prams): 
     global xs,ys,ws,hs,selectObject,xo,yo,trackObject
     if selectObject == True:
         xs = min(x, xo)
@@ -47,11 +47,6 @@ while(True):
         pts = np.int0(pts)
         img2 = cv2.polylines(frame,[pts],True, 255,2)
         
-
-
-
-
-
     if selectObject == True and ws>0 and hs>0:
         cv2.imshow('imshow1',frame[ys:ys+hs,xs:xs+ws])
         cv2.bitwise_not(frame[ys:ys+hs,xs:xs+ws],frame[ys:ys+hs,xs:xs+ws])
